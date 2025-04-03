@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 import dotenv from "dotenv";
+import authmiddleware from "../middleware/authmiddleware.js"
 
 dotenv.config();
 const router = express.Router();
@@ -98,6 +99,10 @@ router.post("/login", async (req, res) => {
         console.error("Login error:", error);  // Added logging
         res.status(500).json({ message: "Server Error", error: error.message });
     }
+});
+
+router.get("/dashboard", authmiddleware, (req, res) => {
+    res.json({ message: `Welcome User ID: ${req.user.id}` });
 });
 
 export default router;
